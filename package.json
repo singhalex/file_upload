@@ -7,6 +7,7 @@
     "dev": "node --watch ./bin/www"
   },
   "dependencies": {
+    "@picocss/pico": "^2.0.6",
     "@prisma/client": "^5.17.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
