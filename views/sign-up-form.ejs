@@ -1,6 +1,11 @@
 <form action="/auth/sign-up" method="POST">
   <label for="username">Username</label>
-  <input type="text" name="username" placeholder="Username" />
+  <input
+    type="text"
+    name="username"
+    placeholder="Username"
+    value="<%= locals.usernameValue %>"
+  />
 
   <label for="password">Password</label>
   <input type="text" name="password" placeholder="Password" />
@@ -10,3 +15,11 @@
 
   <input type="submit" value="Sign Up" />
 </form>
+<% if (locals.errors) { %>
+<ul class="pico-color-red-500">
+  <% errors.forEach((error) => { %>
+  <li><%= error.msg %></li>
+  <% }) %>
+</ul>
+
+<% } %>
