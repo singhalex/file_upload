@@ -17,10 +17,10 @@ model User {
   id       String   @id @default(cuid())
   username String   @unique
   password String
-  uploads  Upload[]
+  folders  Folder[]
 }
 
-model Upload {
+model Folder {
   id     Int    @id @default(autoincrement())
   link   String @unique
   User   User   @relation(fields: [userId], references: [id])
