@@ -7,32 +7,13 @@ const prisma = new PrismaClient();
 
 // Define the local strategy
 passport.use(
-  new LocalStrategy(async (username, password, done) => {
-    try {
-      // Search for the user
-      const user = await prisma.user.findUnique({
-        where: {
-          username: username,
-        },
-      });
-
-      if (!user) {
-        return done(null, false, { msg: "Username does not exist" });
-      }
-
-      // Compare hashed passwords
-      const match = await bcrypt.compare(password, user.password);
-      if (!match) {
-        return done(null, false, { msg: "Incorrect password" });
-      }
-
-      // Authentication passed, return user
-      return done(null, user);
-    } catch (err) {
-      // An error occured, return the error
-      return done(err);
+  new LocalStrategy(
+    { passReqToCallback: true },
+    (req, username, password, done) => {
+      console.log(req.authedUser);
+      return done(null, req.authedUser);
     }
-  })
+  )
 );
 
 // Save the user id and username into the session

@@ -1,15 +1,55 @@
 const bcrypt = require("bcryptjs");
 const asyncHandeler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
+const passport = require("../utils/passport");
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-exports.login_post = asyncHandeler(async (req, res, next) => {
-  // TODO
-  res.send("You have logged in");
-});
+// Render page with log in form on GET
+exports.signup_get = (req, res, next) => {
+  res.render("index", { signUp: true });
+};
 
+// Log in the user on POST
+exports.login_post = [
+  // Authenticate the user
+  body().custom(async (value, { req }) => {
+    const user = await prisma.user.findUnique({
+      where: {
+        username: value.username,
+      },
+    });
+    // Cannot find user in db
+    if (!user) {
+      throw new Error("Username does not exist.");
+    }
+    // Provided password does not match
+    const match = await bcrypt.compare(value.password, user.password);
+    if (!match) {
+      throw new Error("Incorrect password");
+    }
+
+    // Save the retrieved user to the req object
+    req.authedUser = { id: user.id, username: user.username };
+  }),
+
+  // Render page again if errors exist
+  (req, res, next) => {
+    const { errors } = validationResult(req);
+    if (errors.length > 0) {
+      return res.render("index", { errors });
+    }
+    next();
+  },
+
+  // Create a session using the passport local strategy
+  passport.authenticate("local", {
+    successRedirect: "/",
+  }),
+];
+
+// Create user on POST
 exports.signup_post = [
   // Validation and sanitation
   body("username")
@@ -43,7 +83,7 @@ exports.signup_post = [
     // Re-render page if errors exist
     const { errors } = validationResult(req);
     if (errors.length > 0) {
-      res.render("index", { errors, usernameValue: username });
+      res.render("index", { errors, usernameValue: username, signUp: true });
       return;
     }
 
@@ -66,3 +106,12 @@ exports.signup_post = [
     });
   }),
 ];
+
+// Remove user from session on GET
+exports.logout_get = (req, res, next) => {
+  req.logOut((err) => {
+    if (err) return next(err);
+
+    res.redirect("/");
+  });
+};
