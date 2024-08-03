@@ -1,0 +1,21 @@
+<nav>
+  <ul>
+    <li><strong>File Uploader</strong></li>
+  </ul>
+  <ul>
+    <% if (locals.currentUser) { %>
+    <li>Welcome, <%= locals.currentUser.username %></li>
+    <li>
+      <a href="/auth/log-out">
+        <button class="secondary">Log Out</button>
+      </a>
+    </li>
+    <% } else { %>
+    <!-- Render log in or sign up link -->
+    <% if (locals.signUp) { %>
+    <a href="/">Log in</a>
+    <% } else { %>
+    <a href="/auth/sign-up">Sign up</a>
+    <% } %> <% } %>
+  </ul>
+</nav>
