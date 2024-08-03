@@ -10,7 +10,6 @@ passport.use(
   new LocalStrategy(
     { passReqToCallback: true },
     (req, username, password, done) => {
-      console.log(req.authedUser);
       return done(null, req.authedUser);
     }
   )
