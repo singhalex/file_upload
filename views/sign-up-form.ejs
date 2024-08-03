@@ -5,21 +5,24 @@
     name="username"
     placeholder="Username"
     value="<%= locals.usernameValue %>"
+    required
   />
 
   <label for="password">Password</label>
-  <input type="text" name="password" placeholder="Password" />
+  <input
+    type="text"
+    name="password"
+    placeholder="Password must be at least 4 characters"
+    required
+  />
 
-  <label for="confirm">Confirm Password</label>
-  <input type="text" name="confirm" placeholder="Confirm your password" />
+  <label for="confirm">Confirm</label>
+  <input
+    type="text"
+    name="confirm"
+    placeholder="Re-enter your password"
+    required
+  />
 
   <input type="submit" value="Sign Up" />
 </form>
-<% if (locals.errors) { %>
-<ul class="pico-color-red-500">
-  <% errors.forEach((error) => { %>
-  <li><%= error.msg %></li>
-  <% }) %>
-</ul>
-
-<% } %>
