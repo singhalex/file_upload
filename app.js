@@ -3,8 +3,10 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const session = require("express-session");
 const passport = require("./utils/passport");
+const session = require("express-session");
+const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
+const { PrismaClient } = require("@prisma/client");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -25,13 +27,21 @@ app.use(express.static(path.join(__dirname, "public")));
 // Initialize the session middleware
 app.use(
   session({
+    cookie: {
+      maxAge: 5 * 1000, // ms,
+    },
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      // Currently set for 5 seconds
-      maxAge: 1000 * 5,
-    },
+    // Store session data in the db
+    store: new PrismaSessionStore(new PrismaClient(), {
+      // drops sessions after they expire
+      checkPeriod: 2 * 60 * 1000, // ms
+      // sets the record id to the session id
+      dbRecordIdIsSessionId: true,
+      // do not create a record id
+      dbRecordIdFunction: undefined,
+    }),
   })
 );
 
