@@ -26,3 +26,11 @@ model Upload {
   User   User   @relation(fields: [userId], references: [id])
   userId String
 }
+
+// Used to store session data
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}
