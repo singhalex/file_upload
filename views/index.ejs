@@ -6,14 +6,33 @@
   </head>
   <body>
     <main>
-      <header></header>
       <div class="container">
-        <h1>File Uploader</h1>
-        <p>Log In Form</p>
-        <%- include('log-in-form') %>
-        <p>Sign Up Form</p>
+        <%- include('header') %>
+        <!-- Render app here -->
+        <% if (locals.currentUser) { %>
+        <!-- TODO -->
+        <p>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti
+          repellendus ipsum aut perferendis accusamus eum officia est possimus
+          veritatis, quo impedit culpa consequuntur quibusdam deleniti,
+          similique repellat, tempore voluptatem numquam!
+        </p>
+
+        <% } else { %> <% if (locals.signUp) { %>
+        <p>Create a new account</p>
         <!-- Render the Sign Up Form and pass the errors object if it exists -->
-        <%- include('sign-up-form', locals.errors ? {errors} : null) %>
+        <%- include('sign-up-form', locals.errors ? {errors} : null) %> <% }
+        else { %>
+
+        <p>Log in to your account</p>
+        <%- include('log-in-form') %> <% } %> <% if (locals.errors) { %>
+        <!-- Render errors -->
+        <ul>
+          <% errors.forEach((error) => { %>
+          <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+        <% } %> <% } %>
       </div>
       <footer></footer>
     </main>
