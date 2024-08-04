@@ -7,7 +7,7 @@
   <body>
     <main>
       <div class="container">
-        <%- include('header') %>
+        <%- include('components/header') %>
         <!-- Render app here -->
         <% if (locals.currentUser) { %>
         <!-- TODO -->
@@ -34,11 +34,11 @@
         <% }) %> <% } else { %> <% if (locals.signUp) { %>
         <p>Create a new account</p>
         <!-- Render the Sign Up Form and pass the errors object if it exists -->
-        <%- include('sign-up-form', locals.errors ? {errors} : null) %> <% }
+        <%- include('components/sign-up-form', locals.errors ? {errors} : null) %> <% }
         else { %>
 
         <p>Log in to your account</p>
-        <%- include('log-in-form') %> <% } %> <% if (locals.errors) { %>
+        <%- include('components/log-in-form') %> <% } %> <% if (locals.errors) { %>
         <!-- Render errors -->
         <ul>
           <% errors.forEach((error) => { %>
