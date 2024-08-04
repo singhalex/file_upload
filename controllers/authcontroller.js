@@ -98,12 +98,22 @@ exports.signup_post = [
             password: hashedPassword,
           },
         });
-        // TODO
-        res.send(`Hello ${user.username}. Your password is ${user.password}`);
+
+        // Set the user infor to be logged in in the next step
+        req.authedUser = {
+          id: user.id,
+          username: user.username,
+        };
+        next();
       } catch (err) {
         next(err);
       }
     });
+  }),
+
+  // Create a session using the passport local strategy
+  passport.authenticate("local", {
+    successRedirect: "/",
   }),
 ];
 
