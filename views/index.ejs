@@ -18,7 +18,20 @@
           similique repellat, tempore voluptatem numquam!
         </p>
 
-        <% } else { %> <% if (locals.signUp) { %>
+        <form action="/folder" method="POST">
+          <fieldset role="group">
+            <input type="text" placeholder="Folder name" name="folder" />
+
+            <input type="submit" value="+ Create Folder" />
+          </fieldset>
+        </form>
+
+        <% locals.folders.forEach(folder => { %>
+        <article>
+          <a href="/folder/<%= folder.id %>">
+            <%= folder.name %></article>
+          </a>
+        <% }) %> <% } else { %> <% if (locals.signUp) { %>
         <p>Create a new account</p>
         <!-- Render the Sign Up Form and pass the errors object if it exists -->
         <%- include('sign-up-form', locals.errors ? {errors} : null) %> <% }
