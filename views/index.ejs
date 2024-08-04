@@ -12,6 +12,7 @@
         <% if (locals.currentUser) { %>
         <!-- TODO -->
         <%- include('components/create-folder-form') %> <%-
+        include('components/show-errors') %> <%-
         include('components/show-folders') %>
         <br />
 
@@ -25,14 +26,7 @@
         <%- include('components/log-in-form') %> <% } %> <% if (locals.errors) {
         %>
         <!-- Render errors -->
-        <% } %>
-
-        <ul>
-          <% locals?.errors?.forEach((error) => { %>
-          <li><%= error.msg %></li>
-          <% }) %>
-        </ul>
-        <% } %>
+        <% } %> <%- include('components/show-errors') %> <% } %>
       </div>
       <footer></footer>
     </main>
