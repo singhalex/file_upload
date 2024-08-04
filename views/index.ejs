@@ -11,41 +11,28 @@
         <!-- Render app here -->
         <% if (locals.currentUser) { %>
         <!-- TODO -->
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti
-          repellendus ipsum aut perferendis accusamus eum officia est possimus
-          veritatis, quo impedit culpa consequuntur quibusdam deleniti,
-          similique repellat, tempore voluptatem numquam!
-        </p>
+        <%- include('components/create-folder-form') %> <%-
+        include('components/show-folders') %>
+        <br />
 
-        <form action="/folder" method="POST">
-          <fieldset role="group">
-            <input type="text" placeholder="Folder name" name="folder" />
-
-            <input type="submit" value="+ Create Folder" />
-          </fieldset>
-        </form>
-
-        <% locals.folders.forEach(folder => { %>
-        <article>
-          <a href="/folder/<%= folder.id %>">
-            <%= folder.name %></article>
-          </a>
-        <% }) %> <% } else { %> <% if (locals.signUp) { %>
+        <% } else { %> <% if (locals.signUp) { %>
         <p>Create a new account</p>
         <!-- Render the Sign Up Form and pass the errors object if it exists -->
-        <%- include('components/sign-up-form', locals.errors ? {errors} : null) %> <% }
-        else { %>
+        <%- include('components/sign-up-form', locals.errors ? {errors} : null)
+        %> <% } else { %>
 
         <p>Log in to your account</p>
-        <%- include('components/log-in-form') %> <% } %> <% if (locals.errors) { %>
+        <%- include('components/log-in-form') %> <% } %> <% if (locals.errors) {
+        %>
         <!-- Render errors -->
+        <% } %>
+
         <ul>
-          <% errors.forEach((error) => { %>
+          <% locals?.errors?.forEach((error) => { %>
           <li><%= error.msg %></li>
           <% }) %>
         </ul>
-        <% } %> <% } %>
+        <% } %>
       </div>
       <footer></footer>
     </main>
