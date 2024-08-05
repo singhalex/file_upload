@@ -19,6 +19,7 @@ router.get("/", async function (req, res, next) {
 
     folders = folders.folders;
   }
+  console.log(folders);
   res.render("index", { folders });
 });
 
