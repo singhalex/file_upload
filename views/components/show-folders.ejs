@@ -1,5 +1,21 @@
 <% locals?.folders?.forEach(folder => { %>
 <article>
-  <a href="/folder/<%= folder.id %>"> <%= folder.name %> </a>
+  <header>
+    <li>
+      <a href="/folder/<%= folder.id %>"> <%= folder.name %> </a>
+    </li>
+  </header>
+  <!-- TO DO -->
+  Files in here?
+  <footer>
+    <div class="grid">
+      <a href="/folder/<%= folder.id %>/rename" role="button" class="secondary"
+        >Rename</a
+      >
+      <a href="/folder/<%= folder.id %>/delete" role="button" class="contrast"
+        >Delete</a
+      >
+    </div>
+  </footer>
 </article>
 <% }) %>
