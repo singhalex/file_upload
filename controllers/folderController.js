@@ -4,6 +4,13 @@ const { body, validationResult } = require("express-validator");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+const mime = require("mime-types");
+
+const authorizeFolder = require("../utils/authorizeFolder");
+
+// Create new folder on POST
 exports.folder_post = [
   body("folder")
     .trim()
@@ -62,16 +69,79 @@ exports.folder_post = [
   }),
 ];
 
-exports.single_folder_get = asyncHandeler(async (req, res, next) => {
-  const folder = await prisma.folder.findUnique({
-    where: {
-      id: parseInt(req.params.id),
-    },
-  });
+// Show folder detail on GET
+exports.single_folder_get = [
+  authorizeFolder,
+  asyncHandeler(async (req, res, next) => {
+    const folder = await prisma.folder.findUnique({
+      where: {
+        id: parseInt(req.params.id),
+      },
+    });
 
-  if (folder.userId === req.user.id) {
-    res.send(`You are authorized to view folder - ${folder.name}`);
-  } else {
-    res.send("You are not authorized to view this folder");
-  }
-});
+    if (folder.userId === req.user.id) {
+      res.render("folder-view", { folder, mode: "get" });
+    } else {
+      res.send("You are not authorized to view this folder");
+    }
+  }),
+];
+
+// Show folder delete form on GET
+exports.delete_folder_get = [
+  authorizeFolder,
+  asyncHandeler(async (req, res, next) => {
+    const folder = await prisma.folder.findUnique({
+      where: {
+        id: parseInt(req.params.id),
+      },
+    });
+
+    res.render("folder-view", { folder, mode: "delete" });
+  }),
+];
+
+// Delete folder on POST
+exports.delete_folder_post = [
+  authorizeFolder,
+  asyncHandeler(async (req, res, next) => {
+    console.log(req.params.id);
+    await prisma.folder.delete({
+      where: {
+        id: parseInt(req.params.id),
+      },
+    });
+    res.redirect("/");
+  }),
+];
+
+// Show folder rename form on GET
+exports.rename_folder_get = [
+  authorizeFolder,
+  asyncHandeler(async (req, res, next) => {
+    const folder = await prisma.folder.findUnique({
+      where: {
+        id: parseInt(req.params.id),
+      },
+    });
+    res.render("folder-view", { folder, mode: "rename" });
+  }),
+];
+
+// Rename folder on POST
+exports.rename_folder_post = (req, res, next) => {
+  res.send("Folder renamed");
+};
+// Upload file to folder on POST
+exports.upload_to_folder_post = [
+  upload.single("file"),
+
+  (req, res, next) => {
+    const mimeType = req.file.mimetype;
+    console.log(mimeType);
+    console.log(mime.extension(mimeType));
+    // console.log(req.file);
+
+    res.send("UPLOAD FILE HERE");
+  },
+];
