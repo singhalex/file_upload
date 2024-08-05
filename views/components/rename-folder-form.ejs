@@ -1,0 +1,16 @@
+<article>
+  <form action="/folder/<%= folder.id %>/Rename" method="POST">
+    <h2>Do you want to rename this folder?</h2>
+    <input
+      type="text"
+      name="new-name"
+      id="new-name"
+      placeholder="Enter new folder name"
+    />
+    <br />
+    <div role="group">
+      <a href="/" role="button" class="secondary">Cancel</a>
+      <input type="submit" value="Confirm" role="button" />
+    </div>
+  </form>
+</article>
