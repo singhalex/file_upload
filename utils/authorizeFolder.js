@@ -2,6 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const authorizeFolder = async (req, res, next) => {
+  // Checks if user is logged in
   if (req.isAuthenticated()) {
     const check = await prisma.folder.findUnique({
       where: {
@@ -12,6 +13,7 @@ const authorizeFolder = async (req, res, next) => {
       },
     });
 
+    // Check if logged in user is has access to folder
     if (check.userId === req.user?.id) {
       return next();
     }
