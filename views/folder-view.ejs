@@ -8,16 +8,19 @@
     <main>
       <div class="container">
         <%- include('components/header') %>
-
         <h1><%= folder.name %></h1>
-        <form
-          action="/folder/<%= folder.id %>"
-          method="POST"
-          enctype="multipart/form-data"
-        >
-          <input type="file" name="file" id="upload" />
-          <input type="submit" name="submit" id="submit" value="Upload File" />
-        </form>
+
+        <!-- Folder detail view -->
+        <% if (locals.mode === 'get') { %> <%-
+        include('components/upload-file-form') %> <% } %>
+
+        <!-- Delete folder view -->
+        <% if (locals.mode === 'delete') { %> <%-
+        include('components/delete-folder-form') %> <% } %>
+
+        <!-- Rename folder view -->
+        <% if (locals.mode === 'rename') { %> <%-
+        include('components/rename-folder-form') %> <% } %>
       </div>
       <footer></footer>
     </main>
