@@ -3,9 +3,10 @@
     <h2>Do you want to rename this folder?</h2>
     <input
       type="text"
-      name="new-name"
-      id="new-name"
+      name="newName"
+      id="newName"
       placeholder="Enter new folder name"
+      value="<%= locals.folderNameValue %>"
     />
     <br />
     <div role="group">
@@ -13,4 +14,5 @@
       <input type="submit" value="Confirm" role="button" />
     </div>
   </form>
+  <%- include('show-errors') %>
 </article>
