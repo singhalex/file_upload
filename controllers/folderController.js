@@ -17,9 +17,10 @@ exports.folder_post = [
     .escape()
     .notEmpty()
     .withMessage("Folder name cannot be blank"),
+  // Check for duplicate folder name
   body("folder").custom(
     asyncHandeler(async (value, { req }) => {
-      let folders = await prisma.user.findUnique({
+      const folderObject = await prisma.user.findUnique({
         where: {
           id: req.user.id,
         },
@@ -28,7 +29,8 @@ exports.folder_post = [
         },
       });
 
-      folders = folders.folders;
+      const folders = folderObject.folders;
+      // Attach folders to req object to be rendered if errors
       req.folders = folders;
 
       const match = folders.find((folder) => folder.name === value);
@@ -38,16 +40,13 @@ exports.folder_post = [
     })
   ),
   asyncHandeler(async (req, res, next) => {
+    // Render homepage with errors if any
     const { errors } = validationResult(req);
-
     if (errors.length > 0) {
-      console.log(errors);
       return res.render("index", { errors, folders: req.folders });
     }
 
-    // CHECK BELOW
-    console.log(req.user);
-    console.log(req.body.folder);
+    // Create new folder in db
     await prisma.folder.create({
       data: {
         name: req.body.folder,
@@ -55,17 +54,7 @@ exports.folder_post = [
       },
     });
 
-    const user = await prisma.user.findUnique({
-      where: {
-        id: req.user.id,
-      },
-      include: {
-        folders: true,
-      },
-    });
-
-    console.log(user.folders);
-    res.send("New folder created!");
+    return res.redirect("/");
   }),
 ];
 
