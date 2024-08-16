@@ -5,29 +5,27 @@
     <link rel="stylesheet" href="/stylesheets/pico.yellow.min.css" />
   </head>
   <body>
-    <main>
-      <div class="container">
-        <%- include('components/header') %>
-        <!-- Render app here -->
-        <% if (locals.currentUser) { %>
-        <!-- TODO -->
-        <%- include('components/create-folder-form') %> <%-
-        include('components/show-errors') %> <%-
-        include('components/show-folders') %>
-        <br />
+    <header class="container"><%- include('components/header') %></header>
+    <main class="container">
+      <!-- Render app here -->
+      <% if (locals.currentUser) { %>
+      <!-- TODO -->
+      <%- include('components/create-folder-form') %> <%-
+      include('components/show-errors') %> <%-
+      include('components/show-folders') %>
+      <br />
 
-        <% } else { %> <% if (locals.signUp) { %>
-        <p>Create a new account</p>
-        <!-- Render the Sign Up Form and pass the errors object if it exists -->
-        <%- include('components/sign-up-form', locals.errors ? {errors} : null)
-        %> <% } else { %>
+      <% } else { %> <% if (locals.signUp) { %>
+      <p>Create a new account</p>
+      <!-- Render the Sign Up Form and pass the errors object if it exists -->
+      <%- include('components/sign-up-form', locals.errors ? {errors} : null) %>
+      <% } else { %>
 
-        <p>Log in to your account</p>
-        <%- include('components/log-in-form') %> <% } %> <% if (locals.errors) {
-        %>
-        <!-- Render errors -->
-        <% } %> <%- include('components/show-errors') %> <% } %>
-      </div>
+      <p>Log in to your account</p>
+      <%- include('components/log-in-form') %> <% } %> <% if (locals.errors) {
+      %>
+      <!-- Render errors -->
+      <% } %> <%- include('components/show-errors') %> <% } %>
       <footer></footer>
     </main>
   </body>
