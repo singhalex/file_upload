@@ -1,12 +1,15 @@
 <% locals?.folders?.forEach(folder => { %>
 <article>
   <header>
-    <li>
-      <a href="/folder/<%= folder.id %>"> <%= folder.name %> </a>
-    </li>
+    <img
+      src="/images/folderIcon.png"
+      alt="Folder Icon"
+      style="max-width: 2rem; margin-right: 1rem"
+    />
+    <a href="/folder/<%= folder.id %>"> <%= folder.name %> </a>
   </header>
   <!-- TO DO -->
-  Files in here?
+  <p>There are <%= folder._count.files %> files in this folder.</p>
   <footer>
     <div class="grid">
       <a href="/folder/<%= folder.id %>/rename" role="button" class="secondary"
