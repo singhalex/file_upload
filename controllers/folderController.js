@@ -1,12 +1,10 @@
 const asyncHandeler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
+const formatBytes = require("../utils/formatBytes");
+const { DateTime } = require("luxon");
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
-const mime = require("mime-types");
 
 const authorizeFolder = require("../utils/authorizeFolder");
 
@@ -66,13 +64,21 @@ exports.single_folder_get = [
       where: {
         id: parseInt(req.params.id),
       },
+      include: {
+        files: true,
+      },
     });
 
-    if (folder.userId === req.user.id) {
-      res.render("folder-view", { folder, mode: "get" });
-    } else {
-      res.send("You are not authorized to view this folder");
-    }
+    // Format files for display
+    folder.files.forEach((file) => {
+      file.name = file.name.split(".")[0];
+      file.size = formatBytes(file.size);
+      file.date = DateTime.fromJSDate(file.date).toLocaleString(
+        DateTime.DATE_SHORT
+      );
+    });
+
+    res.render("folder-view", { folder, mode: "get" });
   }),
 ];
 
@@ -172,18 +178,4 @@ exports.rename_folder_post = [
     });
     res.render("folder-view", { mode: "rename", folder: updatedFolder });
   }),
-];
-
-// Upload file to folder on POST
-exports.upload_to_folder_post = [
-  upload.single("file"),
-
-  (req, res, next) => {
-    const mimeType = req.file.mimetype;
-    console.log(mimeType);
-    console.log(mime.extension(mimeType));
-    // console.log(req.file);
-
-    res.send("UPLOAD FILE HERE");
-  },
 ];
