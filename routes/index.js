@@ -6,20 +6,25 @@ const prisma = new PrismaClient();
 
 /* GET home page. */
 router.get("/", async function (req, res, next) {
-  let folders = [];
   if (req.user) {
-    folders = await prisma.user.findUnique({
+    const folderQuery = await prisma.folder.findMany({
       where: {
-        id: req.user.id,
+        userId: req.user?.id,
       },
       select: {
-        folders: true,
+        id: true,
+        name: true,
+        _count: {
+          select: {
+            files: true,
+          },
+        },
       },
     });
 
-    folders = folders.folders;
+    return res.render("index", { folders: folderQuery });
   }
-  res.render("index", { folders });
+  res.render("index", { folders: [] });
 });
 
 module.exports = router;
