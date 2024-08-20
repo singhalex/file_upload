@@ -10,10 +10,11 @@
       <!-- Render app here -->
       <% if (locals.currentUser) { %>
       <!-- TODO -->
-      <%- include('components/create-folder-form') %> <%-
-      include('components/show-errors') %> <%-
-      include('components/show-folders') %>
-      <br />
+      <section>
+        <%- include('components/create-folder-form') %> <%-
+        include('components/show-errors') %> <%-
+        include('components/show-folders') %>
+      </section>
 
       <% } else { %> <% if (locals.signUp) { %>
       <p>Create a new account</p>
