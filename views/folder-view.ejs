@@ -5,11 +5,17 @@
     <link rel="stylesheet" href="/stylesheets/pico.yellow.min.css" />
   </head>
   <body>
-    <main>
-      <div class="container">
-        <%- include('components/header') %>
-        <h1><%= folder.name %></h1>
+    <header class="container"><%- include('components/header') %></header>
+    <main class="container">
+      <h1>
+        <img
+          src="/images/folderIcon.png"
+          alt="Folder Icon"
+          style="max-width: 3rem; margin-right: 1rem"
+        /><%= folder.name %>
+      </h1>
 
+      <section>
         <!-- Folder detail view -->
         <% if (locals.mode === 'get') { %> <%-
         include('components/upload-file-form') %> <% } %>
@@ -21,7 +27,38 @@
         <!-- Rename folder view -->
         <% if (locals.mode === 'rename') { %> <%-
         include('components/rename-folder-form') %> <% } %>
-      </div>
+      </section>
+
+      <% if (locals.folder.files.length > 0) { %>
+
+      <table class="striped">
+        <thead>
+          <tr>
+            <th scope="col">File name</th>
+            <th scope="col">Size</th>
+            <th scope="col">Date Uploaded</th>
+            <th scope="col">Type</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% locals.folder.files.forEach((file) => { %>
+          <tr>
+            <th scope="row">
+              <a href="/uploads/<%= file.url.split('/')[0] %>"
+                ><%= file.name %></a
+              >
+            </th>
+            <td><%= file.size %></td>
+            <td><%= file.date %></td>
+            <td><%= file.type.toUpperCase() %></td>
+            <td>Edit Del</td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } %>
+
       <footer></footer>
     </main>
   </body>
