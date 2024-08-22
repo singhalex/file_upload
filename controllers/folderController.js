@@ -1,12 +1,11 @@
 const asyncHandeler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
-const formatBytes = require("../utils/formatBytes");
-const { DateTime } = require("luxon");
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const authorizeFolder = require("../utils/authorizeFolder");
+const retrieveFolder = require("../utils/retrieveFolder");
 
 // Create new folder on POST
 exports.folder_post = [
@@ -59,41 +58,19 @@ exports.folder_post = [
 // Show folder detail on GET
 exports.single_folder_get = [
   authorizeFolder,
-  asyncHandeler(async (req, res, next) => {
-    const folder = await prisma.folder.findUnique({
-      where: {
-        id: parseInt(req.params.id),
-      },
-      include: {
-        files: true,
-      },
-    });
-
-    // Format files for display
-    folder.files.forEach((file) => {
-      file.name = file.name.split(".")[0];
-      file.size = formatBytes(file.size);
-      file.date = DateTime.fromJSDate(file.date).toLocaleString(
-        DateTime.DATE_SHORT
-      );
-    });
-
-    res.render("folder-view", { folder, mode: "get" });
-  }),
+  retrieveFolder,
+  (req, res, next) => {
+    res.render("folder-view", { folder: req.folder, mode: "get" });
+  },
 ];
 
 // Show folder delete form on GET
 exports.delete_folder_get = [
   authorizeFolder,
-  asyncHandeler(async (req, res, next) => {
-    const folder = await prisma.folder.findUnique({
-      where: {
-        id: parseInt(req.params.id),
-      },
-    });
-
-    res.render("folder-view", { folder, mode: "delete" });
-  }),
+  retrieveFolder,
+  (req, res, next) => {
+    res.render("folder-view", { folder: req.folder, mode: "delete" });
+  },
 ];
 
 // Delete folder on POST
@@ -113,19 +90,16 @@ exports.delete_folder_post = [
 // Show folder rename form on GET
 exports.rename_folder_get = [
   authorizeFolder,
-  asyncHandeler(async (req, res, next) => {
-    const folder = await prisma.folder.findUnique({
-      where: {
-        id: parseInt(req.params.id),
-      },
-    });
-    res.render("folder-view", { folder, mode: "rename" });
-  }),
+  retrieveFolder,
+  (req, res, next) => {
+    res.render("folder-view", { folder: req.folder, mode: "rename" });
+  },
 ];
 
 // Rename folder on POST
 exports.rename_folder_post = [
   authorizeFolder,
+  retrieveFolder,
   body("newName")
     .trim()
     .escape()
@@ -152,23 +126,18 @@ exports.rename_folder_post = [
   }),
   asyncHandeler(async (req, res, next) => {
     const { errors } = validationResult(req);
+    // Re-render page if there are errors
     if (errors.length > 0) {
-      // Get folder from db
-      const folder = await prisma.folder.findUnique({
-        where: {
-          id: parseInt(req.params.id),
-        },
-      });
       return res.render("folder-view", {
         errors,
         mode: "rename",
-        folder,
+        folder: req.folder,
         folderNameValue: req.body.newName,
       });
     }
 
     // Update folder name in db
-    const updatedFolder = await prisma.folder.update({
+    await prisma.folder.update({
       where: {
         id: parseInt(req.params.id),
       },
@@ -176,6 +145,9 @@ exports.rename_folder_post = [
         name: req.body.newName,
       },
     });
-    res.render("folder-view", { mode: "rename", folder: updatedFolder });
+
+    // Update the folder name on the req object
+    req.folder.name = req.body.newName;
+    res.render("folder-view", { mode: "rename", folder: req.folder });
   }),
 ];
