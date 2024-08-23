@@ -32,7 +32,6 @@ model Folder {
 model File {
   id       Int      @id @default(autoincrement())
   name     String
-  url      String
   size     Int
   type     String
   date     DateTime
