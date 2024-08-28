@@ -17,7 +17,11 @@ const retrieveFolder = asyncHandeler(async (req, res, next) => {
 
   // Format files for display
   folder.files.forEach((file) => {
-    file.name = file.name.split(".")[0];
+    // Remove extension
+    const fullFileNameArray = file.name.split(".");
+    fullFileNameArray.pop();
+    const truncFileNameArray = fullFileNameArray;
+    file.name = truncFileNameArray.join(".");
     file.size = formatBytes(file.size);
     file.date = DateTime.fromJSDate(file.date).toLocaleString(
       DateTime.DATE_SHORT
