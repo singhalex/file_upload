@@ -45,11 +45,11 @@
           <% locals.folder.files.forEach((file) => { %>
           <tr>
             <th scope="row">
-              <a href="<%= `/download/${file.id}` %>"><%= file.name %></a>
+              <a href="<%= `/file/${file.id}` %>"><%= file.name %></a>
             </th>
             <td><%= file.size %></td>
             <td><%= file.date %></td>
-            <td><%= file.type.toUpperCase() %></td>
+            <td><%= file.extension.toUpperCase() %></td>
             <td>Edit Del</td>
           </tr>
           <% }) %>
