@@ -3,19 +3,21 @@ const prisma = new PrismaClient();
 
 const authorizeFile = async (req, res, next) => {
   if (req.isAuthenticated()) {
-    const { name, userId, uniqueName } = await prisma.file.findUnique({
+    const { name, uniqueName, type, userId } = await prisma.file.findUnique({
       where: {
         id: parseInt(req.params.id),
       },
       select: {
         name: true,
         uniqueName: true,
+        type: true,
         userId: true,
       },
     });
     if (userId === req.user.id) {
       req.uniqueName = uniqueName;
       req.originalFileName = name;
+      req.type = type;
       return next();
     }
   }
