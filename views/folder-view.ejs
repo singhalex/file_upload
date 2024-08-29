@@ -47,7 +47,7 @@
             <th scope="row">
               <img
                 src="/images/fileIcon.png"
-                alt="Folder Icon"
+                alt="File Icon"
                 style="max-width: 1.25rem; margin-right: 0.5rem"
               />
               <a href="<%= `/file/${file.id}` %>"><%= file.name %></a>
@@ -55,7 +55,16 @@
             <td><%= file.size %></td>
             <td><%= file.date %></td>
             <td><%= file.extension.toUpperCase() %></td>
-            <td>Edit Del</td>
+            <td>
+              Edit
+              <a href="<%= `/file/${file.id}/delete` %>">
+                <img
+                  src="/images/trashIcon.png"
+                  alt="Delete"
+                  style="max-width: 1.25rem"
+                />
+              </a>
+            </td>
           </tr>
           <% }) %>
         </tbody>
