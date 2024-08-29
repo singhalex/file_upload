@@ -19,7 +19,7 @@ const retrieveFolder = asyncHandeler(async (req, res, next) => {
   folder.files.forEach((file) => {
     // Remove extension
     const fullFileNameArray = file.name.split(".");
-    fullFileNameArray.pop();
+    file.extension = fullFileNameArray.pop();
     const truncFileNameArray = fullFileNameArray;
     file.name = truncFileNameArray.join(".");
     file.size = formatBytes(file.size);
