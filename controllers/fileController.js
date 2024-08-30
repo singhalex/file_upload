@@ -64,7 +64,7 @@ exports.download_file_get = [
     // Retrieve raw data from supabase
     const { data, error } = await supabase.storage
       .from("files")
-      .download(`${req.user.id}/${req.uniqueName}`);
+      .download(`${req.user.id}/${req.file.uniqueName}`);
 
     if (error) {
       throw error;
@@ -78,12 +78,20 @@ exports.download_file_get = [
 
     // Set headers
     const setHeader = {
-      "Content-Disposition": `attachment; filename=${req.originalFileName}`,
-      "Content-Type": req.type,
+      "Content-Disposition": `attachment; filename=${req.file.originalFileName}`,
+      "Content-Type": req.file.type,
     };
     res.set(setHeader);
 
     // Trigger download
     readStream.pipe(res);
   }),
+];
+
+exports.delete_file_get = [
+  authorizeFile,
+  (req, res, next) => {
+    console.log(req.params.id);
+    res.render("delete-file", { name: res.originalFileName });
+  },
 ];

@@ -15,9 +15,12 @@ const authorizeFile = async (req, res, next) => {
       },
     });
     if (userId === req.user.id) {
-      req.uniqueName = uniqueName;
-      req.originalFileName = name;
-      req.type = type;
+      const file = {
+        originalFileName: name,
+        uniqueName: uniqueName,
+        type: type,
+      };
+      req.file = file;
       return next();
     }
   }
