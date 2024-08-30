@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>File Uploader</title>
+    <link rel="stylesheet" href="/stylesheets/pico.yellow.min.css" />
+  </head>
+  <body>
+    <header class="container"><%- include('components/header') %></header>
+    <main class="container">
+      <form action="/file/<$= file.id %>/delete" method="post">
+        <hgroup>
+          <h2>Are you sure you want to delete this file?</h2>
+          <p>This action cannot be undone.</p>
+        </hgroup>
+        <section>
+          <p>
+            <b><%= file.originalFileName %></b>
+          </p>
+        </section>
+        <div role="group">
+          <a href="/file/<%= file.id %>/retun" role="button" class="secondary"
+            >Cancel</a
+          >
+          <input type="submit" value="Confirm" role="button" />
+        </div>
+      </form>
+      <footer></footer>
+    </main>
+  </body>
+</html>

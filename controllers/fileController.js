@@ -91,7 +91,7 @@ exports.download_file_get = [
 exports.delete_file_get = [
   authorizeFile,
   (req, res, next) => {
-    console.log(req.params.id);
-    res.render("delete-file", { name: res.originalFileName });
+    req.file.id = req.params.id;
+    res.render("delete-file", { file: req.file });
   },
 ];
