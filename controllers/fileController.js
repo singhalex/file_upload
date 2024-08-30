@@ -35,7 +35,7 @@ exports.upload_file_post = [
       .from("files")
       .upload(`${req.user.id}/${uniqueFileName}`, req.file.buffer);
     if (error) {
-      // TODO - HANDLE ERROR HERE //
+      throw new Error("Database error. Please try again.");
     }
 
     // Store file info in db
@@ -67,7 +67,7 @@ exports.download_file_get = [
       .download(`${req.user.id}/${req.file.uniqueName}`);
 
     if (error) {
-      throw error;
+      throw new Error("Database error. Please try again.");
     }
 
     // Convert raw data to readable file
