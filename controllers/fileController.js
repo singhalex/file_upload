@@ -96,6 +96,33 @@ exports.delete_file_get = [
   },
 ];
 
+// Delete file
+exports.delete_file_post = [
+  authorizeFile,
+  // Delete file from db
+  async (req, res, next) => {
+    const deleted = await prisma.file.delete({
+      where: {
+        id: parseInt(req.params.id),
+      },
+    });
+
+    // Delete file from storage
+    const { error } = await supabase.storage
+      .from("files")
+      .remove(`${req.user.id}/${req.file.uniqueName}`);
+
+    // Throw error if storage error
+    if (error) {
+      throw new Error("File Could not be deleted. Please try again.");
+    }
+
+    // Send user back to folder
+    res.redirect(`/folder/${deleted.folderId}`);
+  },
+];
+
+// Return to the containing folder
 exports.file_return_folder_get = expressAsyncHandler(async (req, res, next) => {
   // Lookup folder of file
   const { folderId } = await prisma.file.findUnique({

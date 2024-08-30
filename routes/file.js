@@ -9,6 +9,9 @@ router.get("/:id", fileController.download_file_get);
 // Delete form on GET
 router.get("/:id/delete", fileController.delete_file_get);
 
+// Delete file on POST
+router.post("/:id/delete", fileController.delete_file_post);
+
 // Return to containing folder on GET
 router.get("/:id/return", fileController.file_return_folder_get);
 
