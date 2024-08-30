@@ -95,3 +95,17 @@ exports.delete_file_get = [
     res.render("delete-file", { file: req.file });
   },
 ];
+
+exports.file_return_folder_get = expressAsyncHandler(async (req, res, next) => {
+  // Lookup folder of file
+  const { folderId } = await prisma.file.findUnique({
+    where: {
+      id: parseInt(req.params.id),
+    },
+    select: {
+      folderId: true,
+    },
+  });
+
+  res.redirect(`/folder/${folderId}`);
+});

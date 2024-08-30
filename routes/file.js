@@ -9,4 +9,7 @@ router.get("/:id", fileController.download_file_get);
 // Delete form on GET
 router.get("/:id/delete", fileController.delete_file_get);
 
+// Return to containing folder on GET
+router.get("/:id/return", fileController.file_return_folder_get);
+
 module.exports = router;
