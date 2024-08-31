@@ -24,6 +24,11 @@ exports.upload_file_post = [
   authorizeFolder,
   upload.single("file"),
   expressAsyncHandler(async (req, res, next) => {
+    // Check file size and add error if too large
+    if (req.file.size > 6000000) {
+      req.errors = [{ msg: "File too large." }];
+      return next();
+    }
     // Create unique file name
     const fullFileName = req.file.originalname.split(".");
     const fileExtenstion = fullFileName.pop();
@@ -54,7 +59,11 @@ exports.upload_file_post = [
   }),
   retreiveFolder,
   (req, res, next) => {
-    res.render("folder-view", { mode: "get", folder: req.folder });
+    res.render("folder-view", {
+      mode: "get",
+      folder: req.folder,
+      errors: req.errors,
+    });
   },
 ];
 
