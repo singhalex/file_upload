@@ -3,6 +3,8 @@
   method="POST"
   enctype="multipart/form-data"
 >
+  <p>Files must be less than 6MB.</p>
   <input type="file" name="file" id="upload" required />
   <input type="submit" name="submit" id="submit" value="Upload File" />
 </form>
+<% if (locals.errors?.length > 0) { %> <%- include('show-errors') %> <% } %>
