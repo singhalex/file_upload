@@ -77,7 +77,6 @@ exports.delete_folder_get = [
 exports.delete_folder_post = [
   authorizeFolder,
   asyncHandeler(async (req, res, next) => {
-    console.log(req.params.id);
     await prisma.folder.delete({
       where: {
         id: parseInt(req.params.id),
