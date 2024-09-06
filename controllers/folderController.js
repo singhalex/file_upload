@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 
 const authorizeFolder = require("../utils/authorizeFolder");
 const retrieveFolder = require("../utils/retrieveFolder");
+const supabase = require("../utils/supabase");
 
 // Create new folder on POST
 exports.folder_post = [
@@ -77,11 +78,27 @@ exports.delete_folder_get = [
 exports.delete_folder_post = [
   authorizeFolder,
   asyncHandeler(async (req, res, next) => {
-    await prisma.folder.delete({
+    // Delete folder from DB
+    const deletedFolder = await prisma.folder.delete({
       where: {
         id: parseInt(req.params.id),
       },
+      // DELETE?
+      select: {
+        files: true,
+      },
     });
+
+    // Create array of filepaths to all files in the folder
+    const filePaths = deletedFolder.files.map(
+      (file) => `${req.user.id}/${file.folderId}/${file.uniqueName}`
+    );
+
+    // Remove files from storage
+    const { data, error } = await supabase.storage
+      .from("files")
+      .remove(filePaths);
+
     res.redirect("/");
   }),
 ];
