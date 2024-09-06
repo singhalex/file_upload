@@ -12,10 +12,7 @@ const upload = multer({ storage });
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-const { createClient } = require("@supabase/supabase-js");
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = require("../utils/supabase");
 
 const stream = require("stream");
 
