@@ -122,7 +122,7 @@ exports.delete_file_post = [
     // Delete file from storage
     const { error } = await supabase.storage
       .from("files")
-      .remove(`${req.user.id}/${req.file.uniqueName}`);
+      .remove(`${req.user.id}/${req.file.folderId}/${req.file.uniqueName}`);
 
     // Throw error if storage error
     if (error) {
