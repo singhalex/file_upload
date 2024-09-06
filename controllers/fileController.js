@@ -38,7 +38,10 @@ exports.upload_file_post = [
     // Upload file to supabase
     const { data, error } = await supabase.storage
       .from("files")
-      .upload(`${req.user.id}/${uniqueFileName}`, req.file.buffer);
+      .upload(
+        `${req.user.id}/${req.params.id}/${uniqueFileName}`,
+        req.file.buffer
+      );
     if (error) {
       throw new Error("Database error. Please try again.");
     }
@@ -73,7 +76,7 @@ exports.download_file_get = [
     // Retrieve raw data from supabase
     const { data, error } = await supabase.storage
       .from("files")
-      .download(`${req.user.id}/${req.file.uniqueName}`);
+      .download(`${req.user.id}/${req.file.folderId}/${req.file.uniqueName}`);
 
     if (error) {
       throw new Error("Database error. Please try again.");
