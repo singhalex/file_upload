@@ -36,7 +36,7 @@ model File {
   size       Int
   type       String
   date       DateTime
-  Folder     Folder   @relation(fields: [folderId], references: [id])
+  Folder     Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId   Int
   User       User     @relation(fields: [userId], references: [id])
   userId     String
